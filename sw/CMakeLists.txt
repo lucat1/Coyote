@@ -1,7 +1,7 @@
 #
 # Coyote SW package
 #
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.14)
 
 # Config
 set(EN_AVX "1" CACHE STRING "AVX enabled.")
@@ -104,7 +104,11 @@ if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
 endif()
 
 # Includes
-target_include_directories(Coyote PUBLIC ${CYT_INCLUDE_PATH})
+target_include_directories(Coyote
+    PUBLIC
+        $<BUILD_INTERFACE:${CYT_INCLUDE_PATH}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Coyote>
+)
 target_link_directories(Coyote PUBLIC /usr/local/lib)
 
 # Libs
@@ -131,4 +135,48 @@ if(EN_GPU)
 
 endif()
 
+# Add installation rules
+include(GNUInstallDirs)
 
+# Install the library
+install(TARGETS Coyote
+    EXPORT CoyoteTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}            # for shared libraries (.so)
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}            # for static libraries (.a)
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}            # for executables
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}       # for headers
+)
+
+# Install headers
+install(DIRECTORY ${CYT_INCLUDE_PATH}/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Coyote
+    FILES_MATCHING PATTERN "*.h"
+)
+
+# Export package configuration
+install(EXPORT CoyoteTargets
+    FILE CoyoteTargets.cmake
+    NAMESPACE Coyote::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Coyote
+)
+
+# Generate CMake package configuration files
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/CoyoteConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(
+    ${CMAKE_CURRENT_LIST_DIR}/cmake/CoyoteConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/CoyoteConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Coyote
+)
+
+# Install CMake configuration files
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/CoyoteConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/CoyoteConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Coyote
+)
