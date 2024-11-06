@@ -70,7 +70,7 @@ endif()
 
 # Create a lib
 project(
-    Coyote
+    coyote
     VERSION 2.0.0
     DESCRIPTION
         "Coyote library"
@@ -88,9 +88,9 @@ file(GLOB CYT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp")
 set(CYT_INCLUDE_PATH ${CMAKE_CURRENT_LIST_DIR}/include)
 
 # Add shared
-add_library(Coyote SHARED ${CYT_SOURCES})
+add_library(coyote SHARED ${CYT_SOURCES})
 
-set_target_properties(Coyote PROPERTIES
+set_target_properties(coyote PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION_MAJOR}
 )
@@ -104,34 +104,34 @@ if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
 endif()
 
 # Includes
-target_include_directories(Coyote
+target_include_directories(coyote
     PUBLIC
         $<BUILD_INTERFACE:${CYT_INCLUDE_PATH}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Coyote>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/coyote>
 )
-target_link_directories(Coyote PUBLIC /usr/local/lib)
+target_link_directories(coyote PUBLIC /usr/local/lib)
 
 # Libs
 find_package(Boost COMPONENTS program_options REQUIRED)
-target_link_libraries(Coyote PUBLIC ${Boost_LIBRARIES})
+target_link_libraries(coyote PUBLIC ${Boost_LIBRARIES})
 
 # Comp
 if(EN_AVX)
-    target_compile_definitions(Coyote PUBLIC EN_AVX)
+    target_compile_definitions(coyote PUBLIC EN_AVX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx")
 endif()
 if(EN_GPU)
-    target_compile_definitions(Coyote PUBLIC EN_GPU)
+    target_compile_definitions(coyote PUBLIC EN_GPU)
 
     # Include GPU directories
-    target_include_directories(Coyote
+    target_include_directories(coyote
             PUBLIC
                 $<BUILD_INTERFACE:${ROCM_PATH}/include>
                 $<BUILD_INTERFACE:${ROCM_PATH}/include/hsa>)
 
     # Add GPU libs
-    #set_target_properties(Coyote PROPERTIES LINKER_LANGUAGE HIP)
-    target_link_libraries(Coyote PUBLIC hip::device numa pthread drm drm_amdgpu rt dl hsa-runtime64 hsakmt)
+    #set_target_properties(coyote PROPERTIES LINKER_LANGUAGE HIP)
+    target_link_libraries(coyote PUBLIC hip::device numa pthread drm drm_amdgpu rt dl hsa-runtime64 hsakmt)
 
 endif()
 
@@ -139,7 +139,7 @@ endif()
 include(GNUInstallDirs)
 
 # Install the library
-install(TARGETS Coyote
+install(TARGETS coyote
     EXPORT CoyoteTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}            # for shared libraries (.so)
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}            # for static libraries (.a)
@@ -149,15 +149,15 @@ install(TARGETS Coyote
 
 # Install headers
 install(DIRECTORY ${CYT_INCLUDE_PATH}/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Coyote
-    FILES_MATCHING PATTERN "*.h"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/coyote
+    FILES_MATCHING PATTERN *.hpp
 )
 
 # Export package configuration
 install(EXPORT CoyoteTargets
     FILE CoyoteTargets.cmake
-    NAMESPACE Coyote::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Coyote
+    NAMESPACE fpga::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/coyote
 )
 
 # Generate CMake package configuration files
@@ -171,12 +171,12 @@ write_basic_package_version_file(
 configure_package_config_file(
     ${CMAKE_CURRENT_LIST_DIR}/cmake/CoyoteConfig.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/CoyoteConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Coyote
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/coyote
 )
 
 # Install CMake configuration files
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/CoyoteConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/CoyoteConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Coyote
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/coyote
 )
