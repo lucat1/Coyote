@@ -8,6 +8,12 @@ set(EN_AVX "1" CACHE STRING "AVX enabled.")
 set(EN_GPU "0" CACHE STRING "GPU enabled.")
 set(CYT_LANG CXX)
 
+option(COYOTE_VERBOSE "Print verbose debug statements." OFF)
+
+if(COYOTE_VERBOSE) 
+  add_compile_definitions(VERBOSE)
+endif()
+
 if(EN_GPU)
     if(NOT DEFINED ROCM_PATH)
     if(DEFINED ENV{ROCM_PATH})
