@@ -92,7 +92,8 @@ cThread::cThread(int32_t vfid, pid_t hpid, uint32_t device, std::function<void(i
   hpid(hpid), vfid(vfid),
   vlock(boost::interprocess::open_or_create, ("vpga_mtx_user_" + std::to_string(std::time(nullptr))).c_str()),
   additional_state(std::make_unique<AdditionalState>()) { // Timestamp for plock to prevent multiple users aquiring the same lock at the same time which does not matter for the simulation, only for hardware
-    std::filesystem::path sim_path(SIM_DIR);
+    auto sim_dir = std::getenv("SIM_DIR");
+    std::filesystem::path sim_path(sim_dir);
     sim_path /= "sim";
     std::string input_file_name((sim_path / "input.bin").string());
     std::string output_file_name((sim_path / "output.bin").string());
