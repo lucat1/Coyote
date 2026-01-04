@@ -64,7 +64,7 @@ set_target_properties(Coyote PROPERTIES OUTPUT_NAME "coyotesim")
 find_package(Threads)
 target_link_libraries(Coyote PRIVATE Threads::Threads)
 find_package(Boost REQUIRED)
-target_include_directories(Coyote PRIVATE ${Boost_INCLUDE_DIRS})
+target_include_directories(Coyote PRIVATE ${BOOST_INCLUDE_DIRS})
 
 ##############################
 #    INSTALATION OPTIONS    #

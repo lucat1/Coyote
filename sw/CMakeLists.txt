@@ -133,7 +133,7 @@ set_target_properties(Coyote PROPERTIES OUTPUT_NAME "coyote")
 find_package(Threads)
 target_link_libraries(Coyote PRIVATE Threads::Threads)
 find_package(Boost REQUIRED)
-target_include_directories(Coyote PRIVATE ${Boost_INCLUDE_DIRS})
+target_include_directories(Coyote PRIVATE ${BOOST_INCLUDE_DIRS})
 
 # Additional flags, depending on AVX or GPU support
 if(EN_AVX)
