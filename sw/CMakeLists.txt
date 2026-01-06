@@ -120,11 +120,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_compile_options("-march=native")
 
 # Source files, includes
-file(GLOB CYT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB CYT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/coyote/*.cpp")
 add_library(Coyote SHARED ${CYT_SOURCES})
 target_include_directories(Coyote
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:include/coyote>
 )
 set_target_properties(Coyote PROPERTIES OUTPUT_NAME "coyote")
@@ -170,7 +170,7 @@ install(TARGETS Coyote
 )
 
 # Install headers
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/"
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/coyote"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/coyote
     FILES_MATCHING PATTERN "*.hpp"
 )

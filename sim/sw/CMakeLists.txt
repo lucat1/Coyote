@@ -46,17 +46,17 @@ add_compile_options("-march=native")
 set(CYT_SW_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../sw")
 
 # Source files, includes
-file(GLOB CYT_SOURCES CONFIGURE_DEPENDS "${CYT_SW_DIR}/src/*.cpp")
-file(GLOB CYT_SIM_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB CYT_SOURCES CONFIGURE_DEPENDS "${CYT_SW_DIR}/coyote/*.cpp")
+file(GLOB CYT_SIM_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/coyote/*.cpp")
 list(FILTER CYT_SOURCES EXCLUDE REGEX ".*cThread\\.cpp$")
 list(APPEND CYT_SOURCES ${CYT_SIM_SOURCES})
 
 add_library(Coyote SHARED ${CYT_SOURCES})
 target_include_directories(Coyote
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CYT_SW_DIR}/include>
-        $<INSTALL_INTERFACE:include/coyote>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CYT_SW_DIR}>
+        $<INSTALL_INTERFACE:include/coyote/sim>
 )
 set_target_properties(Coyote PROPERTIES OUTPUT_NAME "coyotesim")
 
@@ -81,19 +81,19 @@ install(TARGETS Coyote
 )
 
 # Install headers
-install(DIRECTORY "${CYT_SW_DIR}/include/"
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/coyote
+install(DIRECTORY "${CYT_SW_DIR}"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/coyote/sim
     FILES_MATCHING PATTERN "*.hpp"
 )
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/"
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/coyote
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/coyote/"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/coyote/sim
     FILES_MATCHING PATTERN "*.hpp"
 )
 
 # Export package configuration
 install(EXPORT CoyoteSimulationTargets
     FILE CoyoteSimulationTargets.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/coyote
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/coyotesim
 )
 
 # Generate CMake package configuration files
