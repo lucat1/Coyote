@@ -102,7 +102,17 @@ cThread::cThread(int32_t vfid, pid_t hpid, uint32_t device,
                                     // users aquiring the same lock at the same
                                     // time which does not matter for the
                                     // simulation, only for hardware
-  auto sim_dir = std::getenv("SIM_DIR");
+  auto raw_sim_dir = std::getenv("SIM_DIR");
+  if (raw_sim_dir == nullptr) {
+    FATAL("you must set the SIM_DIR environment variable to the directory "
+          "build directory where you ran `make simulation`")
+    std::terminate();
+  }
+
+  std::filesystem::path p(raw_sim_dir);
+  auto sim_dir =
+      (p.is_absolute() ? p : std::filesystem::current_path() / p).string();
+
   std::filesystem::path sim_path(sim_dir);
   sim_path /= "sim";
   std::string input_file_name((sim_path / "input.bin").string());

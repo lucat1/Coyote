@@ -137,12 +137,12 @@ target_include_directories(Coyote PRIVATE ${BOOST_INCLUDE_DIRS})
 
 # Additional flags, depending on AVX or GPU support
 if(EN_AVX)
-    target_compile_definitions(Coyote PUBLIC EN_AVX)
+    target_compile_definitions(Coyote PRIVATE EN_AVX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx")
 endif()
 
 if(EN_GPU)
-    target_compile_definitions(Coyote PUBLIC EN_GPU)
+    target_compile_definitions(Coyote PRIVATE EN_GPU)
 
     # Include GPU directories
     target_include_directories(Coyote
