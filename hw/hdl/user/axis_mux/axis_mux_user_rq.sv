@@ -246,4 +246,19 @@ end
 
 meta_queue #(.DATA_BITS($bits(req_t))) inst_out_reg  (.aclk(aclk), .aresetn(aresetn), .s_meta(m_rq_int), .m_meta(m_rq));
 
+ila_axis_mux ila_axis_mux (
+    .clk(aclk),
+
+    .probe0(state_C),
+    .probe1(tr_done),
+    .probe2(resp),
+    .probe3(dest_C),
+    .probe4(s_rq.valid),
+    .probe5(s_rq.ready),
+    .probe6(m_rq.valid),
+    .probe7(m_rq.ready),
+    .probe8(m_rq_int.valid),
+    .probe9(m_rq_int.ready)
+);
+
 endmodule

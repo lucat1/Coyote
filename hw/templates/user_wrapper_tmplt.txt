@@ -947,6 +947,17 @@ module design_user_wrapper_{{ c_reg }} (
     );
     `META_ASSIGN(rdma_rq_wr_cred_int, user_rq_wr_int)
 
+    ila_two_axis ila_two_axis (
+        .clk(aclk),
+
+        .probe0(axis_rdma_sink_int.tready),
+        .probe1(axis_rdma_sink_int.tvalid),
+        .probe2(axis_rdma_sink_int.tlast),
+        .probe3(axis_rdma_recv_int[0].tready),
+        .probe4(axis_rdma_recv_int[0].tvalid),
+        .probe5(axis_rdma_recv_int[0].tlast)
+    );
+
     remote_credits_wr_rdma #(
         .N_DESTS(N_RDMA_AXI)  
     ) inst_remote_credits_wr_rdma (

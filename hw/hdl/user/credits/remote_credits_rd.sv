@@ -89,6 +89,92 @@ module remote_credits_rd #(
         .m_axis_recv(axis_recv_int)
     );
 
+    ila_big_half_one ila_big_half_one (
+        .clk(aclk),
+
+        .probe0(s_axis.tready),
+        .probe1(s_axis.tvalid),
+        .probe2(s_axis.tlast),
+
+        .probe3(m_axis_resp[0].tready),
+        .probe4(m_axis_resp[0].tvalid),
+        .probe5(m_axis_resp[0].tlast),
+
+        .probe6(m_axis_recv[0].tready),
+        .probe7(m_axis_recv[0].tvalid),
+        .probe8(m_axis_recv[0].tlast)
+    );
+
+    ila_big_half_two ila_big_half_two (
+        .clk(aclk),
+        .probe0(s_req.ready),
+        .probe1(s_req.valid),
+
+        .probe2(m_req.ready),
+        .probe3(m_req.valid),
+
+        .probe4(req_dest[0].ready),
+        .probe5(req_dest[0].valid),
+
+        .probe6(req_q[0].ready),
+        .probe7(req_q[0].valid),
+
+        .probe8(req_parsed[0].ready),
+        .probe9(req_parsed[0].valid),
+
+        .probe10(req_cred[0].ready),
+        .probe11(req_cred[0].valid),
+
+        .probe12(xfer[0])
+    );
+
+    ila_big_ila ila_big_ila (
+        .clk(aclk),
+
+        .probe0(s_axis.tready),
+        .probe1(s_axis.tvalid),
+        .probe2(s_axis.tlast),
+
+        .probe3(m_axis_resp[0].tready),
+        .probe4(m_axis_resp[0].tvalid),
+        .probe5(m_axis_resp[0].tlast),
+
+        .probe6(m_axis_recv[0].tready),
+        .probe7(m_axis_recv[0].tvalid),
+        .probe8(m_axis_recv[0].tlast),
+
+        .probe9(s_req.ready),
+        .probe10(s_req.valid),
+
+        .probe11(m_req.ready),
+        .probe12(m_req.valid),
+
+        .probe13(req_dest[0].ready),
+        .probe14(req_dest[0].valid),
+
+        .probe15(req_q[0].ready),
+        .probe16(req_q[0].valid),
+
+        .probe17(req_parsed[0].ready),
+        .probe18(req_parsed[0].valid),
+
+        .probe19(req_cred[0].ready),
+        .probe20(req_cred[0].valid),
+
+        .probe21(xfer[0])
+    );
+
+    ila_two_axis ila_two_axis (
+        .clk(aclk),
+
+        .probe0(s_axis.tready),
+        .probe1(s_axis.tvalid),
+        .probe2(s_axis.tlast),
+        .probe3(axis_resp_int[0].tready),
+        .probe4(axis_resp_int[0].tvalid),
+        .probe5(axis_resp_int[0].tlast)
+    );
+
     for(genvar i = 0; i < N_DESTS; i++) begin
         axisr_data_fifo_512 inst_resp_cq (
             .s_axis_aresetn(aresetn),

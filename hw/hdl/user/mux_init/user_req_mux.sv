@@ -158,5 +158,5 @@ meta_reg #(.DATA_BITS($bits(req_t))) inst_reg_local_rd  (.aclk(aclk), .aresetn(a
 meta_reg #(.DATA_BITS($bits(req_t))) inst_reg_local_wr  (.aclk(aclk), .aresetn(aresetn), .s_meta(user_local_wr_int), .m_meta(user_local_wr));
 
 `endif 
-    
+
 endmodule

@@ -1187,6 +1187,28 @@ module design_dynamic_top #(
         .dclk                   (dclk)
     );
 
+    ila_dynamic_top ila_dynamic_top (
+        .clk(aclk),
+
+        .probe0(s_rdma_rq_rd.ready),
+        .probe1(s_rdma_rq_rd.valid),
+
+        .probe2(rdma_rq_rd_s0.ready),
+        .probe3(rdma_rq_rd_s0.valid),
+
+        .probe4(rdma_rq_rd_s1[0].ready),
+        .probe5(rdma_rq_rd_s1[0].valid),
+
+        .probe6(rdma_rq_rd_s2[0].ready),
+        .probe7(rdma_rq_rd_s2[0].valid),
+
+        .probe8(rdma_rq_rd_s3[0].ready),
+        .probe9(rdma_rq_rd_s3[0].valid),
+
+        .probe10(rdma_rq_rd_ul[0].ready),
+        .probe11(rdma_rq_rd_ul[0].valid)
+    );
+
 {% endfor %}
 	
 endmodule
